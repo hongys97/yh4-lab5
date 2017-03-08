@@ -7,40 +7,65 @@ import structure5.DoublyLinkedNode;
 import structure5.DoublyLinkedListIterator;
 import java.util.Iterator;
 
-public class LinkedList<E> extends DoublyLinkedList<E>
-{
+public class LinkedList<E> extends DoublyLinkedList<E>{
 
-  // Test method
+  /**
+   * Construct a string representation of the list.
+   * @post returns a string representing list
+   * @return A string representing the elements of the list.
+   */
+  public String toString(){
+    StringBuffer s = new StringBuffer();
+    s.append("<LinkedList:");
+    Iterator<E> li = iterator();
+    while (li.hasNext()){
+      s.append(" "+li.next());
+    }
+    s.append(">");
+    return s.toString();
+  }
+    /**
+     * Construct an iterator to traverse the list.
+     * @post returns iterator that allows the traversal of list.
+     * @return An iterator that traverses the list from head to tail.
+     */
+  public Iterator<E> iterator(){   // Students: This code should not be modified
+    return new DoublyLinkedListIterator<E>(head,tail);
+  }
+    // Test method
   public static void main (String args[]){
     LinkedList cool = new LinkedList();
   }
 
 
-    //Number of elements within the list.
-    protected int count;
-    // Reference to head of the list.
-    protected DoublyLinkedNode<E> head;
-    //Reference to tail of the list.
-    protected DoublyLinkedNode<E> tail;
+  //Number of elements within the list.
+  protected int count;
+  // Reference to head of the list.
+  protected DoublyLinkedNode<E> head;
+  //Reference to tail of the list.
+  protected DoublyLinkedNode<E> tail;
+
+
+
+
+
 
     /**
      * Constructs an empty list.
      * @post constructs an empty list
      */
-    public LinkedList()
-    {
+    public LinkedList(){
        //super();
        head = new DoublyLinkedNode<E>(null);
        tail = new DoublyLinkedNode<E>(null, null, head);
-        }
+    }
 
     /**
      * Determine the number of elements in the list.
      * @post returns the number of elements in list
      * @return The number of elements found in the list.
      */
-    public int size()
-    {
+    public int size(){
 	     return count;
     }
 
@@ -49,8 +74,7 @@ public class LinkedList<E> extends DoublyLinkedList<E>
      * @post returns true iff the list has no elements.
      * @return True iff list has no values.
      */
-    public boolean isEmpty()
-    {
+    public boolean isEmpty(){
 	     return size() == 0;
     }
 
@@ -59,9 +83,8 @@ public class LinkedList<E> extends DoublyLinkedList<E>
      pre: count > 0
      * @post removes all the elements from the list
      */
-    public void clear()
-    {
-	     // Students: modify this code
+    public void clear(){ // Students: modify this code
+
        // We want to clear everything EXCEPT head and tail. Remove all elements from indeces count to 0.
        Assert.pre(count > 0 , "The number of elements is not 0.");
        for (int i = count; i > 0; i--){
@@ -76,24 +99,9 @@ public class LinkedList<E> extends DoublyLinkedList<E>
      * @pre previous is non null
      * @post list contains a node following previous that contains value
      */
-    protected void insertAfter(E value, DoublyLinkedNode<E> previous)
-    {
-	     // Students: write this code.
-       Assert.pre(previous != null && previous != head, "There is a value for us to add E after, and the method cannot be used to insert a value a dummy node.");
-       /*int index = indexOf(previous.value());
-       // set all elements following previous to their current index + 1
-       for (int i = count; i > (count-index); i--){
-         E nextVal = get(i);
-         set(i+1, nextVal);
-       }
-       // set value to index after previous
-       set(index+1, value);
-       count++;*/
+    protected void insertAfter(E value, DoublyLinkedNode<E> previous){ // Students: write this code.
+       Assert.pre(previous != null, "There is a value for us to add E after");
 
-       // Add value to the index after previous
-       //super.add(indexOf(previous.value())+1, value);
-
-       // or
        DoublyLinkedNode<E> insert = new DoublyLinkedNode<E>(value, previous.next(), previous);
        previous.next().setPrevious(insert);
        previous.setNext(insert);
@@ -107,117 +115,97 @@ public class LinkedList<E> extends DoublyLinkedList<E>
      * @post node node is removed from the list
      * @return the value of the node removed
      */
-    protected E remove(DoublyLinkedNode<E> node)
-    {
+    protected E remove(DoublyLinkedNode<E> node){
+      // Set the previous and after of 'node' to be previous and afters of each other; decrease count; return value of node
+      Assert.pre(node != null, "There is a node for us to remove.");
       node.previous().setNext(node.next());
       node.next().setPrevious(node.previous());
+      count--;
       return node.value();
     }
 
 
     /**
      * Add a value to the head of the list.
-     *
      * @pre value is not null
      * @post adds element to head of list
-     *
      * @param value The value to be added.
      */
-    public void addFirst(E value)
-    {
+    public void addFirst(E value){ // Insert value after head:
+        Assert.pre(value != null, "There is a value for us to add.");
         insertAfter(value, head);
     }
 
     /**
      * Add a value to the tail of the list.
-     *
      * @pre value is not null
      * @post adds new value to tail of list
-     *
      * @param value The value to be added.
      */
-    public void addLast(E value)
-    {
-
+    public void addLast(E value){
+        Assert.pre(value != null, "There is a value for us to add.");
+        // Insert after the node at index count?
+        insertAfter(value, tail.previous());
     }
 
     /**
-     * Remove a value from the head of the list.
-     * Value is returned.
-     *
+     * Remove a value from the head of the list. Value is returned.
      * @pre list is not empty
      * @post removes first value from list
-     *
      * @return The value removed from the list.
      */
-    public E removeFirst()
-    {
-	// Students: modify this code.
-	Assert.pre(!isEmpty(),"List is not empty.");
-	DoublyLinkedNode<E> temp = head;
-	head = head.next();
-	if (head != null) {
-	    head.setPrevious(null);
-	} else {
-	    tail = null; // remove final value
-	}
-	temp.setNext(null);// helps clean things up; temp is free
-	count--;
-	return temp.value();
+    public E removeFirst(){ // Students: modify this code.
+	     Assert.pre(!isEmpty(),"List is not empty.");
+       return remove(head.next());
     }
 
     /**
      * Remove a value from the tail of the list.
-     *
      * @pre list is not empty
      * @post removes value from tail of list
-     *
      * @return The value removed from the list.
      */
-    public E removeLast()
-    {
-	// Students: modify this code.
-	Assert.pre(!isEmpty(),"List is not empty.");
-	DoublyLinkedNode<E> temp = tail;
-	tail = tail.previous();
-	if (tail == null) {
-	    head = null;
-	} else {
-	    tail.setNext(null);
-	}
-	count--;
-	return temp.value();
+    public E removeLast(){ // Students: modify this code.
+      Assert.pre(!isEmpty(),"List is not empty.");
+      return remove(tail.previous());
     }
 
     /**
      * Get a copy of the first value found in the list.
-     *
      * @pre list is not empty
      * @post returns first value in list.
-     *
      * @return A reference to first value in list.
      */
-    public E getFirst()
-    {
-	// Students: modify this code.
-  E first = get(1);
-	return first;
+    public E getFirst(){
+      Assert.pre(!isEmpty(),"List is not empty.");
+	     return get(1);
     }
 
     /**
      * Get a copy of the last value found in the list.
-     *
      * @pre list is not empty
      * @post returns last value in list.
-     *
      * @return A reference to the last value in the list.
      */
-    public E getLast()
-    {
-	// Students: modify this code.
-	E last = get(count);
-  return last;
+    public E getLast(){
+      Assert.pre(!isEmpty(),"List is not empty.");
+      return get(count);
     }
+
+
+
+
+
+
+
+
+
+
+//------------------------------------------------------------------------
+
+
+
+
 
     /**
      * Insert the value at location.
@@ -290,10 +278,8 @@ public class LinkedList<E> extends DoublyLinkedList<E>
 
     /**
      * Get the value at location i.
-     *
      * @pre 0 <= i < size()
      * @post returns the object found at that location.
-     *
      * @param i the position of the value to be retrieved.
      * @return the value retrieved from location i (returns null if i invalid)
      */
@@ -464,46 +450,4 @@ public class LinkedList<E> extends DoublyLinkedList<E>
 	}
 	return null;
     }
-
-
-
-
-
-
-
-
-
-
-    /**
-     * Construct a string representation of the list.
-     *
-     * @post returns a string representing list
-     *
-     * @return A string representing the elements of the list.
-     */
-    public String toString()
-    {
-      	StringBuffer s = new StringBuffer();
-      	s.append("<LinkedList:");
-      	Iterator<E> li = iterator();
-      	while (li.hasNext())
-      	{
-      	    s.append(" "+li.next());
-      	}
-      	s.append(">");
-      	return s.toString();
-    }
-
-
-    /**
-     * Construct an iterator to traverse the list.
-     *
-     * @post returns iterator that allows the traversal of list.
-     *
-     * @return An iterator that traverses the list from head to tail.
-     */
-    public Iterator<E> iterator()
-    {// Students: This code should not be modified
-       return new DoublyLinkedListIterator<E>(head,tail);
-    }
-}
+  }
