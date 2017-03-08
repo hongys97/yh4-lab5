@@ -209,39 +209,37 @@ public class LinkedList<E> extends DoublyLinkedList<E>{
 
     /**
      * Insert the value at location.
-     *
      * @pre 0 <= i <= size()
      * @post adds the ith entry of the list to value o
      * @param i the index of this new value
      * @param o the the value to be stored
      */
-    public void add(int i, E o)
-    {
-
-	// Students: modify this code.
-	Assert.pre((0 <= i) &&
-		   (i <= size()), "Index in range.");
-	if (i == 0) addFirst(o);
-	else if (i == size()) addLast(o);
-	else {
-	    DoublyLinkedNode<E> before = null;
-	    DoublyLinkedNode<E> after = head;
-	    // search for ith position, or end of list
-	    while (i > 0)
-	    {
-		before = after;
-		after = after.next();
-		i--;
-	    }
+    public void add(int i, E o){ // Students: modify this code.
+	     Assert.pre((0 <= i) && (i <= size()), "Index in range.");
+      	if (i == 0){
+          addFirst(o);
+        } else if (i == size()) {
+          addLast(o);
+        } else {
+      	  DoublyLinkedNode<E> before = tail;
+      	  DoublyLinkedNode<E> after = tail.next();
+      	    // search for ith position, or end of list
+      	    while (i > 0){
+      		    before = after;
+      		    after = after.next();
+      		    i--;
+      	    }
 	    // create new value to insert in correct position
-	    DoublyLinkedNode<E> current =
-		new DoublyLinkedNode<E>(o,after,before);
+	    DoublyLinkedNode<E> current = new DoublyLinkedNode<E>(o,after,before);
 	    count++;
 	    // make after and before value point to new value
 	    before.setNext(current);
 	    after.setPrevious(current);
-	}
+	     }
     }
+
+//------------------------------------------------------------------------
+
 
     /**
      * Remove and return the value at location i.
