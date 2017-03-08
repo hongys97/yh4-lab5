@@ -216,13 +216,13 @@ public class LinkedList<E> extends DoublyLinkedList<E>{
      */
     public void add(int i, E o){ // Students: modify this code.
 	     Assert.pre((0 <= i) && (i <= size()), "Index in range.");
-      	if (i == 0){
+      	if (i == 1){
           addFirst(o);
         } else if (i == size()) {
           addLast(o);
         } else {
-      	  DoublyLinkedNode<E> before = tail;
-      	  DoublyLinkedNode<E> after = tail.next();
+      	  DoublyLinkedNode<E> before = head;
+      	  DoublyLinkedNode<E> after = head.next();
       	    // search for ith position, or end of list
       	    while (i > 0){
       		    before = after;
@@ -243,36 +243,35 @@ public class LinkedList<E> extends DoublyLinkedList<E>{
 
     /**
      * Remove and return the value at location i.
-     *
      * @pre 0 <= i < size()
      * @post removes and returns the object found at that location.
-     *
      * @param i the position of the value to be retrieved.
      * @return the value retrieved from location i (returns null if i invalid)
      */
-    public E remove(int i)
-    {
+    public E remove(int i){ // Students: modify this code.
+	     Assert.pre((0 <= i) && (i < size()), "Index in range.");
+	        if (i == 1){
+            return removeFirst();
+          } else if (i == size()){
+            return removeLast();
+          }
+          DoublyLinkedNode<E> previous = head;
+	        DoublyLinkedNode<E> finger = head.next();
+	        // search for the value indexed, keep track of previous
+	        while (i > 0){
+            previous = finger;
+            finger = finger.next();
+            i--;
+          }
+          previous.setNext(finger.next());
+          finger.next().setPrevious(previous);
+          count--;
+          // finger's value is old value, return it
+          return finger.value();
+        }
 
-	// Students: modify this code.
-	Assert.pre((0 <= i) &&
-		   (i < size()), "Index in range.");
-	if (i == 0) return removeFirst();
-	else if (i == size()-1) return removeLast();
-	DoublyLinkedNode<E> previous = null;
-	DoublyLinkedNode<E> finger = head;
-	// search for the value indexed, keep track of previous
-	while (i > 0)
-	{
-	    previous = finger;
-	    finger = finger.next();
-	    i--;
-	}
-	previous.setNext(finger.next());
-	finger.next().setPrevious(previous);
-	count--;
-	// finger's value is old value, return it
-	return finger.value();
-    }
+//------------------------------------------------------------------------
+
 
     /**
      * Get the value at location i.
@@ -281,21 +280,18 @@ public class LinkedList<E> extends DoublyLinkedList<E>{
      * @param i the position of the value to be retrieved.
      * @return the value retrieved from location i (returns null if i invalid)
      */
-    public E get(int i)
-    {
+    public E get(int i){ // Students: modify this code.
+      if (i >= size()) return null;
+      DoublyLinkedNode<E> finger = head;
+      // search for the ith element or end of list
+      while (i > 0){
+        finger = finger.next();
+        i--;
+	    }
+	    // not end of list, return the value found
+	     return finger.value();
+      }
 
-	// Students: modify this code.
-	if (i >= size()) return null;
-	DoublyLinkedNode<E> finger = head;
-	// search for the ith element or end of list
-	while (i > 0)
-	{
-	    finger = finger.next();
-	    i--;
-	}
-	// not end of list, return the value found
-	return finger.value();
-    }
 
     /**
      * Set the value stored at location i to object o, returning the old value.
