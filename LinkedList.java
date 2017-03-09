@@ -32,10 +32,7 @@ public class LinkedList<E> extends DoublyLinkedList<E>{
   public Iterator<E> iterator(){   // Students: This code should not be modified
     return new DoublyLinkedListIterator<E>(head,tail);
   }
-    // Test method
-  public static void main (String args[]){
-    LinkedList cool = new LinkedList();
-  }
+
 
 
   //Number of elements within the list.
@@ -44,8 +41,6 @@ public class LinkedList<E> extends DoublyLinkedList<E>{
   protected DoublyLinkedNode<E> head;
   //Reference to tail of the list.
   protected DoublyLinkedNode<E> tail;
-
-
 
 
 
@@ -88,6 +83,7 @@ public class LinkedList<E> extends DoublyLinkedList<E>{
        // We want to clear everything EXCEPT head and tail. Remove all elements from indeces count to 0.
        Assert.pre(count > 0 , "The number of elements is not 0.");
        for (int i = count; i > 0; i--){
+           System.out.println(i);
          remove(i);
        }
     }
@@ -215,7 +211,7 @@ public class LinkedList<E> extends DoublyLinkedList<E>{
      * @param o the the value to be stored
      */
     public void add(int i, E o){ // Students: modify this code.
-	     Assert.pre((0 <= i) && (i <= size()), "Index in range.");
+	     Assert.pre((0 <= i) && (i <= size()), "Index in range. (add)");
       	if (i == 1){
           addFirst(o);
         } else if (i == size()) {
@@ -249,14 +245,14 @@ public class LinkedList<E> extends DoublyLinkedList<E>{
      * @return the value retrieved from location i (returns null if i invalid)
      */
     public E remove(int i){ // Students: modify this code.
-	     Assert.pre((0 <= i) && (i < size()), "Index in range.");
+	     Assert.pre((0 <= i) && (i < size()+1), "Index in range. (remove)");
 	        if (i == 1){
             return removeFirst();
           } else if (i == size()){
             return removeLast();
           }
-          DoublyLinkedNode<E> previous = head;
-	        DoublyLinkedNode<E> finger = head.next();
+            DoublyLinkedNode<E> previous = head;
+	        DoublyLinkedNode<E> finger = previous.next();
 	        // search for the value indexed, keep track of previous
 	        while (i > 0){
             previous = finger;
