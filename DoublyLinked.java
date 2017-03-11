@@ -63,11 +63,11 @@ public class DoublyLinked<E> extends AbstractList<E>
     public E removeFirst()
     {
         Assert.pre(!isEmpty(),"List is not empty.");
-        DoublyLinkedNode<E> temp = head;
-        head = head.next();
-        if (head != null) {
+        DoublyLinkedNode<E> temp = head; // temp value to store first value
+        head = head.next(); // make the 2nd node the 1st
+        if (head != null) { // If there is a 2nd node, now there's nothing in front of it, making it the 1st
             head.setPrevious(null);
-        } else {
+        } else { // If there is no 2nd node, there is nothing at the end of the list (remove first = remove first/last/only element in the list)
             tail = null; // remove final value
         }
         temp.setNext(null);// helps clean things up; temp is free
