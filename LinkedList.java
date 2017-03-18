@@ -137,7 +137,7 @@ public class LinkedList<E> extends DoublyLinkedList<E>{
     * @post removes first value from list
     * @return The value removed from the list.
     */
-    public E removeFirst(){ // Students: modify this code.
+    public E removeFirst(){
         Assert.pre(!isEmpty(),"List is not empty.");
         return remove(head.next());
     }
@@ -148,7 +148,7 @@ public class LinkedList<E> extends DoublyLinkedList<E>{
     * @post removes value from tail of list
     * @return The value removed from the list.
     */
-    public E removeLast(){ // Students: modify this code.
+    public E removeLast(){
         Assert.pre(!isEmpty(),"List is not empty.");
         return remove(tail.previous());
     }
@@ -161,7 +161,7 @@ public class LinkedList<E> extends DoublyLinkedList<E>{
     */
     public E getFirst(){
         Assert.pre(!isEmpty(),"List is not empty.");
-        return get(0);
+        return head.next().value();
     }
 
     /**
@@ -172,7 +172,7 @@ public class LinkedList<E> extends DoublyLinkedList<E>{
     */
     public E getLast(){
         Assert.pre(!isEmpty(),"List is not empty.");
-        return get(size()-1);
+        return tail.previous().value();
     }
 
     /**
@@ -182,7 +182,7 @@ public class LinkedList<E> extends DoublyLinkedList<E>{
     * @param i the index of this new value
     * @param o the the value to be stored
     */
-    public void add(int i, E o){ // Students: modify this code.
+    public void add(int i, E o){
         Assert.pre((0 <= i) && (i <= size()), "Index in range. (add)");
         DoublyLinkedNode<E> before = head;
         DoublyLinkedNode<E> after = head.next();

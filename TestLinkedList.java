@@ -20,6 +20,7 @@ public class TestLinkedList {
 		compareList("0 1 10 2 3 4 5", list);
 
 		System.out.println(list.getFirst());
+		System.out.println(list.get(1));
 		System.out.println(list.getLast());
 
 		list.clear();
